@@ -1,0 +1,3 @@
+# PDFs ficam apenas locais — contêm chaves de API
+*.pdf
+*.PDF
