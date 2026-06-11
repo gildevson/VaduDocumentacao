@@ -1,0 +1,211 @@
+{
+    "CnpjCpf": "07.139.978\u002f0001-88",
+    "Nome": "DTA COMERCIAL LTDA",
+    "NomeFantasia": "DTA DISTRIBUIDORA",
+    "Logradouro": "RODOVIA GOVERNADOR MARIO COVAS",
+    "NumeroLogradouro": "11206",
+    "ComplementoEndereco": "PAVMTO03",
+    "BairroEndereco": "SERRA DO ANIL",
+    "MunicipioEndereco": "CARIACICA",
+    "UfEndereco": "ES",
+    "TelefonePrincipal": "(27) 3770-1800 \u002f (27) 3216-6026",
+    "EmailPrincipal": "processos@icc.cnt.br",
+    "Site": "",
+    "ReceitaSituacao": "ATIVA",
+    "ReceitaDataSituacao": "2004-12-07T00:00:00.000",
+    "ReceitaMotivoSituacao": "",
+    "ReceitaTipo": "MATRIZ",
+    "ReceitaAbertura": "2004-12-07T00:00:00.000",
+    "ReceitaNaturezaJuridica": "206-2 - Sociedade Empres\u00e1ria Limitada",
+    "ReceitaEFR": "",
+    "ReceitaSituacaoEspecial": "",
+    "ReceitaDataSituacaoEspecial": null,
+    "ReceitaCapitalSocial": 400000,
+    "CadastroRaizCNPJ_Id": 7139978,
+    "Nire": "32.600.096.315",
+    "SimplesNacional": false,
+    "SIMEI": false,
+    "SimplesNacionalSIMEIConsultaDe": "2021-09-14T00:00:00.000",
+    "Porte": "EPP",
+    "ReceitaAtividade": "45.30-7\u002f01 Com\u00e9rcio por atacado de pe\u00e7as e acess\u00f3rios novos para ve\u00edculos automotores\r\n",
+    "ReceitaAtividadeSecundaria": "45.41-2\u002f02 Com\u00e9rcio por atacado de pe\u00e7as e acess\u00f3rios para motocicletas e motonetas\r\n45.30-7\u002f02 Com\u00e9rcio por atacado de pneum\u00e1ticos e c\u00e2maras-de-ar\r\n46.81-8\u002f05 Com\u00e9rcio atacadista de lubrificantes\r\n46.63-0\u002f00 Com\u00e9rcio atacadista de m\u00e1quinas e equipamentos para uso industrial; partes e pe\u00e7as\r\n46.89-3\u002f99 Com\u00e9rcio atacadista especializado em outros produtos intermedi\u00e1rios n\u00e3o especificados anteriormente\r\n45.41-2\u002f01 Com\u00e9rcio por atacado de motocicletas e motonetas\r\n",
+    "VaduAtividadeCNAE": "Com\u00e9rcio",
+    "ReceitaMatrizCapitalSocial": 400000,
+    "CepEnderecoFormatado": "29147-030",
+    "Socios": [
+        {
+            "Qualificacao": "49-S\u00f3cio-Administrador",
+            "PaisOrigem": "",
+            "QualificacaoRepresentanteLegal": "",
+            "Nome": "RAPHAELLA LORENZONI FALCHETTO TANAKA",
+            "NomeRepresentanteLegal": null
+        }
+    ],
+    "retConsCad": {
+        "consultaComSucesso": true,
+        "infCons": {
+            "verAplic": "",
+            "cStat": 111,
+            "xMotivo": "Consulta cadastro com uma ocorrencia",
+            "UF": "ES",
+            "CNPJ": "07139978000188",
+            "CPF": null,
+            "dhCons": "2026-05-04T10:03:06.648",
+            "cUF": 32,
+            "infCad": [
+                {
+                    "IE": "082306273",
+                    "CNPJ": "7139978000188",
+                    "CPF": null,
+                    "UF": "ES",
+                    "cSit": 1,
+                    "indCredNFe": 4,
+                    "indCredCTe": 4,
+                    "xNome": "GF DISTRIBUIDORA DE PECAS EIRELI EPP",
+                    "xRegApur": "N\u00c3O INFORMADO",
+                    "CNAE": "4530701",
+                    "dIniAtiv": "2005-03-03T00:00:00.000",
+                    "dUltSit": "2013-05-27T00:00:00.000",
+                    "dBaixa": null,
+                    "tipoIE": "N\u00c3O INFORMADO",
+                    "situacaoIE": "Habilitado",
+                    "situacaoCNPJ": "Sem restri\u00e7\u00e3o",
+                    "dfeHabilitados": "Nenhum",
+                    "ender": {
+                        "xLgr": "RUA CLARICE LISPECTOR",
+                        "nro": "122",
+                        "xCpl": "GALPAO AREA 26 CONTORNO",
+                        "xBairro": "SERRA DO ANIL",
+                        "cMun": "3201308",
+                        "xMun": "Cariacica",
+                        "CEP": "29147025"
+                    }
+                }
+            ]
+        },
+        "log": [
+            {
+                "uf": "ES",
+                "mensagem": "Contribuintes de ES foram encontrados via webService da receita"
+            },
+            {
+                "uf": "GO",
+                "mensagem": "Consultando GO pelo Site... UF esta entregando resposta errada pelo WebService"
+            },
+            {
+                "uf": "PB",
+                "mensagem": "Consultando PB pelo Site... UF est\u00e1 entregando resposta errada pelo WebService"
+            },
+            {
+                "uf": "BA",
+                "mensagem": "Consultando BA pelo Site... Falha na consulta pelo webService: tunneling socket could not be established, statusCode=502"
+            },
+            {
+                "uf": "MA",
+                "mensagem": "Consultando MA pelo Site... Falha na consulta pelo webService: O estado informado n\u00e3o possui webService para consulta"
+            }
+        ]
+    },
+    "qtdFunc": 14,
+    "qtdFuncMatriz": 14,
+    "CodIbge": "3201308",
+    "Filiais": [
+        {
+            "cnpj": "07.139.978\u002f0001-88",
+            "municipioEndereco": "CARIACICA",
+            "ufEndereco": "ES",
+            "receitaSituacao": "ATIVA"
+        },
+        {
+            "cnpj": "07.139.978\u002f0002-69",
+            "municipioEndereco": "VITORIA",
+            "ufEndereco": "ES",
+            "receitaSituacao": "BAIXADA"
+        },
+        {
+            "cnpj": "07.139.978\u002f0003-40",
+            "municipioEndereco": "VENDA NOVA DO IMIGRANTE",
+            "ufEndereco": "ES",
+            "receitaSituacao": "ATIVA"
+        },
+        {
+            "cnpj": "07.139.978\u002f0004-20",
+            "municipioEndereco": "CARIACICA",
+            "ufEndereco": "ES",
+            "receitaSituacao": "ATIVA"
+        }
+    ],
+    "Fornecedores": [
+        {
+            "cnpj": "07.262.105\u002f0001-68",
+            "nome": "DAINAPECK DISTRIBUIDORA DE COMPONENTES AUTOMOTIVOS LTDA."
+        },
+        {
+            "cnpj": "86.797.115\u002f0001-74",
+            "nome": "ECKISIL FREIOS SISTEMAS AUTOMOTIVOS LTDA"
+        },
+        {
+            "cnpj": "84.229.624\u002f0001-75",
+            "nome": "METALURGICA FEY LTDA"
+        },
+        {
+            "cnpj": "61.099.974\u002f0001-69",
+            "nome": "COLORADO SA MERCANTIL E INDUSTRIAL"
+        },
+        {
+            "cnpj": "02.222.289\u002f0001-19",
+            "nome": "POLIPECAS DISTRIBUIDORA AUTOMOTIVA LTDA"
+        },
+        {
+            "cnpj": "27.485.374\u002f0001-09",
+            "nome": "METALOSA INDUSTRIA METALURGICA SA"
+        },
+        {
+            "cnpj": "59.717.553\u002f0001-02",
+            "nome": "GRUPO MULTI S.A"
+        },
+        {
+            "cnpj": "67.239.038\u002f0001-92",
+            "nome": "GAIVOTA AUTOMOTIVA DO BRASIL LTDA"
+        },
+        {
+            "cnpj": "72.026.024\u002f0001-20",
+            "nome": "QUINELATO INDUSTRIA E COMERCIO LTDA"
+        },
+        {
+            "cnpj": "72.026.560\u002f0001-26",
+            "nome": "ARCA - INDUSTRIA E COMERCIO IMPORTACAO E EXPORTACAO DE RETENTORES LTDA."
+        },
+        {
+            "cnpj": "76.812.379\u002f0001-04",
+            "nome": "ZM SA"
+        },
+        {
+            "cnpj": "80.646.755\u002f0001-05",
+            "nome": "ITACORDA INDUSTRIA E COMERCIO DE CORDAS LTDA"
+        },
+        {
+            "cnpj": "92.660.406\u002f0001-19",
+            "nome": "FRIGELAR COMERCIO E INDUSTRIA LTDA"
+        },
+        {
+            "cnpj": "45.493.772\u002f0001-40",
+            "nome": "AGROSTAHL SA INDUSTRIA E COMERCIO"
+        },
+        {
+            "cnpj": "18.925.438\u002f0001-46",
+            "nome": "PRADOLUX S.A."
+        },
+        {
+            "cnpj": "15.358.988\u002f0001-32",
+            "nome": "BERTOLINI SISTEMAS DE ARMAZENAGEM S\u002fA"
+        }
+    ],
+    "RecursoAmbiental": {
+        "dataAtualizacao": null,
+        "score": 0,
+        "nivel": "Sem risco",
+        "potencialidade": "Sem risco"
+    },
+    "atualizado": true
+}
