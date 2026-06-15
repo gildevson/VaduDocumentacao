@@ -164,6 +164,8 @@ SELECT
 
     MAX(CASE WHEN VaduDetalheTemp.Identificador = 'atualizado'
         THEN VaduDetalheTemp.Valor END) AS CadastroAtualizado
+    MAX(VaduDetalheTemp.Chave) AS Chave
+     MAX(VaduDetalheTemp.id) AS Vadu_id
 
 FROM CadastroBaseConsulta
 INNER JOIN Empresa
