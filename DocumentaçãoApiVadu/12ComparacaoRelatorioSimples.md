@@ -10,22 +10,22 @@ implementadas, quais estão faltando e qual a origem dos dados de cada bloco.
 
 ## Comparação por seção
 
-| # | Seção | simples.pdf | VaduSimples.rpt | Origem dos dados |
+| # | Seção | Páginas no simples.pdf | VaduSimples.rpt | Origem dos dados |
 |---|---|---|---|---|
-| 1 | Capa | ✅ | ✅ | `ViewVaduConsultaCadastral` |
-| 2 | Índice | ✅ | ✅ | Texto fixo |
-| 3 | Dados cadastrais | ✅ | ✅ | `ViewVaduConsultaCadastral` |
-| 4 | Sócios e Administradores | ✅ | ✅ | `ViewVaduConsultaSocios` |
-| 5 | SEFAZ | ✅ | ✅ | `ViewVaduConsultaSefaz` |
-| 6 | Fachada e entorno 360º | ✅ | ❌ | Google Street View (API externa) |
-| 7 | Processos judiciais | ✅ | ❌ | API VADU — endpoint não integrado |
-| 8 | Dados Serasa | ✅ | ❌ | API Serasa — não integrada |
-| 9 | Pontos de atenção | ✅ | ❌ | API VADU — endpoint não integrado |
-| 10 | Cartórios BOA VISTA | ✅ | ❌ | API BOA VISTA — não integrada |
-| 11 | Alterações cadastrais | ✅ | ❌ | API VADU — endpoint não integrado |
-| 12 | Cartórios CENPROT | ✅ | ❌ | API CENPROT — não integrada |
-| 13 | PEP / COAF por sócio | ✅ | ❌ | API VADU — não retornado no JSON atual |
-| 14 | Empresas participantes (por sócio) | ✅ | ❌ | API VADU — não retornado no JSON atual |
+| 1 | Capa | p. 1 | ✅ | `ViewVaduConsultaCadastral` |
+| 2 | Índice | p. 2-3 | ✅ | Texto fixo |
+| 3 | Dados cadastrais | p. 1-3 | ✅ | `ViewVaduConsultaCadastral` |
+| 4 | Sócios e Administradores | p. 1-3 | ✅ | `ViewVaduConsultaSocios` |
+| 5 | SEFAZ | p. 1-3 | ✅ | `ViewVaduConsultaSefaz` |
+| 6 | Fachada e entorno 360º | p. 4 | ❌ | Google Street View (API externa) |
+| 7 | Processos judiciais | p. 5–11 | ❌ | API VADU — endpoint não integrado |
+| 8 | Dados Serasa | p. 12 | ❌ | API Serasa — não integrada |
+| 9 | Pontos de atenção | p. 13 | ❌ | API VADU — endpoint não integrado |
+| 10 | Cartórios BOA VISTA | p. 14 | ❌ | API BOA VISTA — não integrada |
+| 11 | Alterações cadastrais | p. 15–16 | ❌ | API VADU — endpoint não integrado |
+| 12 | Cartórios CENPROT | p. 17 | ❌ | API CENPROT — não integrada |
+| 13 | PEP / COAF por sócio | p. 19, 21 | ❌ | API VADU — não retornado no JSON atual |
+| 14 | Empresas participantes (por sócio) | p. 20, 22 | ❌ | API VADU — não retornado no JSON atual |
 
 ---
 
@@ -115,6 +115,24 @@ múltiplas fontes externas não presentes na integração atual.
 2. Atualizar o código C# de importação do JSON para capturar novos campos na `VaduDetalheTemp`
 3. Criar views para cada novo bloco de dados
 4. Criar subrelatórios no Crystal Reports para cada seção
+
+---
+
+## Mapa de páginas — simples.pdf (22 páginas)
+
+| Página(s) | Seção |
+|---|---|
+| p. 1–3 | Capa, Índice, Dados Cadastrais, Sócios, SEFAZ |
+| p. 4 | Fachada e Entorno 360° |
+| p. 5–11 | Processos Judiciais |
+| p. 12 | Dados Serasa |
+| p. 13 | Pontos de Atenção |
+| p. 14 | Cartórios BOA VISTA |
+| p. 15–16 | Alterações Cadastrais |
+| p. 17 | Cartórios CENPROT |
+| p. 18 | — |
+| p. 19, 21 | PEP / COAF por Sócio |
+| p. 20, 22 | Empresas Participantes por Sócio |
 
 ---
 

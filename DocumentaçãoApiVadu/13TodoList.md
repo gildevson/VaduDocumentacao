@@ -126,3 +126,5 @@
 1. **Fornecedores** — dados já estão no JSON; implementar agora sem dependência externa
 2. **Pontos de Atenção** — pode ser feito com os dados atuais via fórmulas Crystal
 3. **Confirmar com a VADU** quais endpoints estão disponíveis no contrato atual
+
+
