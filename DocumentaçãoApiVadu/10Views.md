@@ -229,61 +229,121 @@ WHERE CadastroBaseConsulta.IsDeleted = 0
 
 ## ViewVaduConsultaFiliais
 
-View que lista as filiais retornadas pela VADU para cada consulta.
+View que lista as filiais retornadas pela VADU para cada consulta, no formato PIVOT (uma linha por filial).
+Inclui `CnpjCpf` e `NomeConsultado` do retorno VADU para complementar os dados do `CadastroBase`.
+
+> **Nota:** Os padrões `LIKE 'Filiais[[]%]%'` usam `[[]` para escapar o colchete literal `[` no SQL Server.
 
 ```sql
-CREATE VIEW ViewVaduConsultaFiliais AS
+ALTER VIEW ViewVaduConsultaFiliais AS
 SELECT
-    -- QUEM CONSULTOU
-    Empresa.Nome                        AS EmpresaConsultante,
-
-    -- QUEM FOI CONSULTADO
-    CadastroBase.CPFCNPJ                AS CNPJConsultado,
-    CadastroBase.Razao                  AS RazaoSocialConsultada,
-
-    -- DADOS DA CONSULTA
-    CadastroBaseConsulta.Id             AS ConsultaId,
-    CadastroBaseConsulta.Data           AS DataConsulta,
-
-    -- FILIAIS
-    VaduDetalheTemp.Identificador       AS CampoFilial,
-    VaduDetalheTemp.Valor               AS ValorFilial
-
-FROM CadastroBaseConsulta
-INNER JOIN Empresa
-    ON Empresa.Id = CadastroBaseConsulta.EmpresaId
-INNER JOIN CadastroBase
-    ON CadastroBase.Id = CadastroBaseConsulta.CadastroBaseId
-INNER JOIN VaduDetalheTemp
-    ON VaduDetalheTemp.CadastroBaseConsultaId = CadastroBaseConsulta.Id
-WHERE CadastroBaseConsulta.IsDeleted = 0
-  AND VaduDetalheTemp.IsDeleted = 0
-  AND VaduDetalheTemp.Identificador LIKE 'Filiais%'
+    Filiais.EmpresaConsultante,
+    Filiais.CNPJConsultado,
+    Filiais.RazaoSocialConsultada,
+    Filiais.ConsultaId,
+    Filiais.DataConsulta,
+    Filiais.Chave,
+    DadosVadu.CnpjCpf,
+    DadosVadu.NomeConsultado,
+    Filiais.FilialIndice,
+    Filiais.FilialCNPJ,
+    Filiais.FilialMunicipio,
+    Filiais.FilialUF,
+    Filiais.FilialSituacao
+FROM (
+    SELECT
+        Empresa.Razao               AS EmpresaConsultante,
+        CadastroBase.CPFCNPJ        AS CNPJConsultado,
+        CadastroBase.Razao          AS RazaoSocialConsultada,
+        CadastroBaseConsulta.Id     AS ConsultaId,
+        CadastroBaseConsulta.Data   AS DataConsulta,
+        VaduDetalheTemp.Chave,
+        CAST(
+            SUBSTRING(
+                VaduDetalheTemp.Identificador,
+                CHARINDEX('[', VaduDetalheTemp.Identificador) + 1,
+                CHARINDEX(']', VaduDetalheTemp.Identificador) - CHARINDEX('[', VaduDetalheTemp.Identificador) - 1
+            ) AS INT
+        )                           AS FilialIndice,
+        MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Filiais[[]%]/cnpj'
+            THEN VaduDetalheTemp.Valor END) AS FilialCNPJ,
+        MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Filiais[[]%]/municipioEndereco'
+            THEN VaduDetalheTemp.Valor END) AS FilialMunicipio,
+        MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Filiais[[]%]/ufEndereco'
+            THEN VaduDetalheTemp.Valor END) AS FilialUF,
+        MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Filiais[[]%]/receitaSituacao'
+            THEN VaduDetalheTemp.Valor END) AS FilialSituacao
+    FROM CadastroBaseConsulta
+    INNER JOIN Empresa      ON Empresa.Id = CadastroBaseConsulta.EmpresaId
+    INNER JOIN CadastroBase ON CadastroBase.Id = CadastroBaseConsulta.CadastroBaseId
+    INNER JOIN VaduDetalheTemp ON VaduDetalheTemp.CadastroBaseConsultaId = CadastroBaseConsulta.Id
+    WHERE CadastroBaseConsulta.IsDeleted = 0
+      AND VaduDetalheTemp.IsDeleted = 0
+      AND VaduDetalheTemp.Identificador LIKE 'Filiais[[]%]%'
+    GROUP BY
+        Empresa.Razao, CadastroBase.CPFCNPJ, CadastroBase.Razao,
+        CadastroBaseConsulta.Id, CadastroBaseConsulta.Data,
+        VaduDetalheTemp.Chave,
+        CAST(
+            SUBSTRING(
+                VaduDetalheTemp.Identificador,
+                CHARINDEX('[', VaduDetalheTemp.Identificador) + 1,
+                CHARINDEX(']', VaduDetalheTemp.Identificador) - CHARINDEX('[', VaduDetalheTemp.Identificador) - 1
+            ) AS INT
+        )
+) Filiais
+LEFT JOIN (
+    SELECT
+        CadastroBaseConsulta.Id AS ConsultaId,
+        MAX(CASE WHEN VaduDetalheTemp.Identificador = 'CnpjCpf'
+            THEN VaduDetalheTemp.Valor END) AS CnpjCpf,
+        MAX(CASE WHEN VaduDetalheTemp.Identificador = 'Nome'
+            THEN VaduDetalheTemp.Valor END) AS NomeConsultado
+    FROM CadastroBaseConsulta
+    INNER JOIN VaduDetalheTemp ON VaduDetalheTemp.CadastroBaseConsultaId = CadastroBaseConsulta.Id
+    WHERE CadastroBaseConsulta.IsDeleted = 0
+      AND VaduDetalheTemp.IsDeleted = 0
+      AND VaduDetalheTemp.Identificador IN ('CnpjCpf', 'Nome')
+    GROUP BY CadastroBaseConsulta.Id
+) DadosVadu ON DadosVadu.ConsultaId = Filiais.ConsultaId
 ```
 
-**Uso:** Listar todas as filiais do consultado retornadas pela VADU.
+**Uso:** Listar todas as filiais do consultado — uma linha por filial. `FilialIndice` indica a ordem (0, 1, 2...).
+`CnpjCpf` e `NomeConsultado` vêm do retorno VADU e podem diferir do `CadastroBase`.
 
 ---
 
 ## ViewVaduConsultaSefaz
 
 View com os dados da Sefaz (retConsCad) retornados pela VADU.
+Inclui também `CnpjCpf`, `NomeConsultado` e `NomeFantasia` do retorno VADU, e `SefazCNPJ`/`SefazNome`
+retornados diretamente pela SEFAZ (que podem diferir do `CadastroBase`).
 
 ```sql
-CREATE VIEW ViewVaduConsultaSefaz AS
+ALTER VIEW [dbo].[ViewVaduConsultaSefaz] AS
 SELECT
-    -- QUEM CONSULTOU
-    Empresa.Nome                        AS EmpresaConsultante,
+    Empresa.Razao AS EmpresaConsultante,
+    CadastroBase.CPFCNPJ  AS CNPJConsultado,
+    CadastroBase.Razao AS RazaoSocialConsultada,
+    CadastroBaseConsulta.Id AS ConsultaId,
+    CadastroBaseConsulta.Data AS DataConsulta,
+    VaduDetalheTemp.Chave,
+    MAX(CASE WHEN VaduDetalheTemp.Identificador = 'CnpjCpf'
+        THEN VaduDetalheTemp.Valor END) AS CnpjCpf,
 
-    -- QUEM FOI CONSULTADO
-    CadastroBase.CPFCNPJ                AS CNPJConsultado,
-    CadastroBase.Razao                  AS RazaoSocialConsultada,
+    MAX(CASE WHEN VaduDetalheTemp.Identificador = 'Nome'
+        THEN VaduDetalheTemp.Valor END) AS NomeConsultado,
 
-    -- DADOS DA CONSULTA
-    CadastroBaseConsulta.Id             AS ConsultaId,
-    CadastroBaseConsulta.Data           AS DataConsulta,
+    MAX(CASE WHEN VaduDetalheTemp.Identificador = 'NomeFantasia'
+        THEN VaduDetalheTemp.Valor END) AS NomeFantasia,
 
-    -- DADOS SEFAZ
+    -- CNPJ E NOME RETORNADO PELO SEFAZ
+    MAX(CASE WHEN VaduDetalheTemp.Identificador = 'retConsCad/infCons/infCad[0]/CNPJ'
+        THEN VaduDetalheTemp.Valor END) AS SefazCNPJ,
+
+    MAX(CASE WHEN VaduDetalheTemp.Identificador = 'retConsCad/infCons/infCad[0]/xNome'
+        THEN VaduDetalheTemp.Valor END) AS SefazNome,
+
     MAX(CASE WHEN VaduDetalheTemp.Identificador = 'retConsCad/infCons/cStat'
         THEN VaduDetalheTemp.Valor END) AS SefazCodStatus,
 
@@ -296,14 +356,14 @@ SELECT
     MAX(CASE WHEN VaduDetalheTemp.Identificador = 'retConsCad/infCons/dhCons'
         THEN VaduDetalheTemp.Valor END) AS SefazDataConsulta,
 
+    MAX(CASE WHEN VaduDetalheTemp.Identificador = 'retConsCad/infCons/infCad[0]/IE'
+        THEN VaduDetalheTemp.Valor END) AS InscricaoEstadual,
+
     MAX(CASE WHEN VaduDetalheTemp.Identificador = 'retConsCad/infCons/infCad[0]/situacaoIE'
         THEN VaduDetalheTemp.Valor END) AS SituacaoIE,
 
     MAX(CASE WHEN VaduDetalheTemp.Identificador = 'retConsCad/infCons/infCad[0]/situacaoCNPJ'
         THEN VaduDetalheTemp.Valor END) AS SituacaoCNPJ,
-
-    MAX(CASE WHEN VaduDetalheTemp.Identificador = 'retConsCad/infCons/infCad[0]/IE'
-        THEN VaduDetalheTemp.Valor END) AS InscricaoEstadual,
 
     MAX(CASE WHEN VaduDetalheTemp.Identificador = 'retConsCad/infCons/infCad[0]/xRegApur'
         THEN VaduDetalheTemp.Valor END) AS RegimeApuracao,
@@ -320,16 +380,22 @@ INNER JOIN VaduDetalheTemp
     ON VaduDetalheTemp.CadastroBaseConsultaId = CadastroBaseConsulta.Id
 WHERE CadastroBaseConsulta.IsDeleted = 0
   AND VaduDetalheTemp.IsDeleted = 0
-  AND VaduDetalheTemp.Identificador LIKE 'retConsCad%'
+  AND (
+      VaduDetalheTemp.Identificador LIKE 'retConsCad%'
+      OR VaduDetalheTemp.Identificador IN ('CnpjCpf', 'Nome', 'NomeFantasia')
+  )
 GROUP BY
-    Empresa.Nome,
+    Empresa.Razao,
     CadastroBase.CPFCNPJ,
     CadastroBase.Razao,
+    VaduDetalheTemp.Chave,
     CadastroBaseConsulta.Id,
     CadastroBaseConsulta.Data
+GO
 ```
 
-**Uso:** Verificar situação fiscal do consultado junto à Sefaz.
+**Uso:** Verificar situação fiscal do consultado junto à Sefaz. `SefazCNPJ` e `SefazNome` são os dados
+retornados diretamente pela Sefaz e podem diferir do `CadastroBase` (ex: razão social desatualizada).
 
 ---
 
@@ -338,13 +404,14 @@ GROUP BY
 View que lista os sócios retornados pela VADU para cada consulta. Retorna **uma linha por sócio** — diferente das demais views que fazem PIVOT.
 
 ```sql
-CREATE VIEW ViewVaduConsultaSocios AS
+ALTER VIEW [dbo].[ViewVaduConsultaSocios] AS
 SELECT
-    Empresa.Razao                       AS EmpresaConsultante,
-    CadastroBase.CPFCNPJ                AS CNPJConsultado,
-    CadastroBase.Razao                  AS RazaoSocialConsultada,
-    CadastroBaseConsulta.Id             AS ConsultaId,
-    CadastroBaseConsulta.Data           AS DataConsulta,
+    Empresa.Razao AS EmpresaConsultante,
+    CadastroBase.CPFCNPJ AS CNPJConsultado,
+    CadastroBase.Razao AS RazaoSocialConsultada,
+    CadastroBaseConsulta.Id AS ConsultaId,
+    CadastroBaseConsulta.Data AS DataConsulta,
+	VaduDetalheTemp.Chave,
 
     CAST(
         SUBSTRING(
@@ -354,19 +421,19 @@ SELECT
         ) AS INT
     )                                   AS SocioIndice,
 
-    MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Socios[%]/Nome'
+    MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Socios[[]%]/Nome'
         THEN VaduDetalheTemp.Valor END) AS SocioNome,
 
-    MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Socios[%]/Qualificacao'
+    MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Socios[[]%]/Qualificacao'
         THEN VaduDetalheTemp.Valor END) AS SocioQualificacao,
 
-    MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Socios[%]/PaisOrigem'
+    MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Socios[[]%]/PaisOrigem'
         THEN VaduDetalheTemp.Valor END) AS SocioPaisOrigem,
 
-    MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Socios[%]/NomeRepresentanteLegal'
+    MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Socios[[]%]/NomeRepresentanteLegal'
         THEN VaduDetalheTemp.Valor END) AS SocioRepresentante,
 
-    MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Socios[%]/QualificacaoRepresentanteLegal'
+    MAX(CASE WHEN VaduDetalheTemp.Identificador LIKE 'Socios[[]%]/QualificacaoRepresentanteLegal'
         THEN VaduDetalheTemp.Valor END) AS SocioQualificacaoRepresentante
 
 FROM CadastroBaseConsulta
@@ -378,13 +445,14 @@ INNER JOIN VaduDetalheTemp
     ON VaduDetalheTemp.CadastroBaseConsultaId = CadastroBaseConsulta.Id
 WHERE CadastroBaseConsulta.IsDeleted = 0
   AND VaduDetalheTemp.IsDeleted = 0
-  AND VaduDetalheTemp.Identificador LIKE 'Socios[%]%'
+  AND VaduDetalheTemp.Identificador LIKE 'Socios[[]%]%'
 GROUP BY
     Empresa.Razao,
     CadastroBase.CPFCNPJ,
     CadastroBase.Razao,
     CadastroBaseConsulta.Id,
     CadastroBaseConsulta.Data,
+	VaduDetalheTemp.Chave,
     CAST(
         SUBSTRING(
             VaduDetalheTemp.Identificador,
@@ -392,6 +460,9 @@ GROUP BY
             CHARINDEX(']', VaduDetalheTemp.Identificador) - CHARINDEX('[', VaduDetalheTemp.Identificador) - 1
         ) AS INT
     )
+GO
+
+
 ```
 
 **Uso:** Listar todos os sócios do consultado retornados pela VADU. No Crystal Reports, o Details da sub repete uma linha por sócio.

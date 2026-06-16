@@ -140,10 +140,18 @@ DFe Habilitados: {DfeHabilitados}
 
 **Link com relatório principal:** `ConsultaId = ConsultaId`
 
-**Conteúdo do Details (repete por filial):**
+**Conteúdo do Details (repete por filial, ordenado por `FilialIndice`):**
 ```
-{CampoFilial} - {ValorFilial}
+{FilialCNPJ}  |  {FilialMunicipio} - {FilialUF}  |  {FilialSituacao}
 ```
+
+| Campo | Descrição |
+|---|---|
+| `FilialIndice` | Ordem da filial no retorno VADU (0, 1, 2...) |
+| `FilialCNPJ` | CNPJ da filial |
+| `FilialMunicipio` | Município do endereço |
+| `FilialUF` | UF do endereço |
+| `FilialSituacao` | Situação na Receita Federal (ex: ATIVA, BAIXADA) |
 
 ---
 
