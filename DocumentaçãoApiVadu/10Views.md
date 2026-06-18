@@ -495,6 +495,13 @@ WHERE CadastroBaseConsulta.IsDeleted = 0
   AND VaduDetalheTemp.Id IS NULL
 ```
 
+
+```sql
+SELECT DISTINCT Identificador 
+FROM VaduDetalheTemp 
+WHERE Identificador LIKE 'Socios[[]%]%'
+```
+
 **Uso:** Monitorar falhas de consulta — registros que não geraram detalhe na VaduDetalheTemp.
 
 ---
